@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Camera } from "expo-camera";
 import { FontAwesome } from "@expo/vector-icons";
@@ -6,6 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 const MyCamera = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const cameraRef = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -22,7 +23,7 @@ const MyCamera = () => {
   }
   return (
     <View style={{ flex: 1 }}>
-      <Camera style={{ flex: 1 }} type={type}>
+      <Camera style={{ flex: 1 }} type={type} ref={cameraRef}>
         <View
           style={{
             flex: 1,
@@ -45,8 +46,7 @@ const MyCamera = () => {
             }}
           >
             <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-              {" "}
-              Flip{" "}
+              Flip
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -54,6 +54,12 @@ const MyCamera = () => {
               alignSelf: "flex-end",
               alignItems: "center",
               backgroundColor: "transparent",
+            }}
+            onPress={async () => {
+              if (cameraRef) {
+                const data = await cameraRef.current.takePictureAsync();
+                console.log(data);
+              }
             }}
           >
             <FontAwesome
