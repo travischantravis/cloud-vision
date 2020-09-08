@@ -13,7 +13,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <NavigationContainer>
-        <HomeStack.Navigator initialRouteName="Home">
+        <HomeStack.Navigator initialRouteName="Camera">
           <HomeStack.Screen name="Home" component={HomeScreen} />
           <HomeStack.Screen name="Camera" component={CameraScreen} />
           <HomeStack.Screen name="Preview" component={PreviewScreen} />

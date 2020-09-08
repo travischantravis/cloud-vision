@@ -1,18 +1,37 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
-import { FontAwesome } from "@expo/vector-icons";
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
 
 const MyCamera = () => {
+  const navigation = useNavigation();
+  const cameraRef = useRef(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const cameraRef = useRef(null);
 
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
+    const getPermissionsAsync = async () => {
+      // 1. Camera roll Permission
+      if (Platform.OS === "ios") {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        // if (status !== "granted") {
+        //   alert("Sorry, we need camera roll permissions to make this work!");
+        // }
+      }
+      // 2. Camera Permission
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
       setHasPermission(status === "granted");
-    })();
+    };
+    getPermissionsAsync();
   }, []);
 
   if (hasPermission === null) {
@@ -32,11 +51,37 @@ const MyCamera = () => {
           }}
         >
           <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignSelf: "flex-end",
-              alignItems: "center",
+            style={styles.button}
+            onPress={async () => {
+              // Select an image from gallery
+              const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+              });
+              navigation.navigate("Preview", { image: result });
             }}
+          >
+            <Ionicons
+              name="ios-photos"
+              style={{ color: "#fff", fontSize: 35 }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={async () => {
+              // Take a picture now
+              if (cameraRef) {
+                const result = await cameraRef.current.takePictureAsync();
+                navigation.navigate("Preview", { image: result });
+              }
+            }}
+          >
+            <Ionicons
+              name="ios-camera"
+              style={{ color: "#fff", fontSize: 40 }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
             onPress={() => {
               setType(
                 type === Camera.Constants.Type.back
@@ -45,25 +90,8 @@ const MyCamera = () => {
               );
             }}
           >
-            <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-              Flip
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              alignSelf: "flex-end",
-              alignItems: "center",
-              backgroundColor: "transparent",
-            }}
-            onPress={async () => {
-              if (cameraRef) {
-                const data = await cameraRef.current.takePictureAsync();
-                console.log(data);
-              }
-            }}
-          >
-            <FontAwesome
-              name="camera"
+            <Ionicons
+              name="ios-reverse-camera"
               style={{ color: "#fff", fontSize: 40 }}
             />
           </TouchableOpacity>
@@ -75,4 +103,11 @@ const MyCamera = () => {
 
 export default MyCamera;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  button: {
+    flex: 1,
+    alignSelf: "flex-end",
+    backgroundColor: "transparent",
+    alignItems: "center",
+  },
+});

@@ -13,7 +13,7 @@ const HomeScreen = ({ navigation }) => {
           backgroundColor: "transparent",
         }}
         onPress={() => {
-          navigation.navigate("Camera", {});
+          navigation.navigate("Camera");
         }}
       >
         <FontAwesome name="camera" style={{ color: "#fff", fontSize: 40 }} />
