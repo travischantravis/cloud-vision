@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 
 const ImagePreview = (props) => {
   const { image } = props;
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   image: {
     height: 400,
     alignSelf: "center",
-    // vertical image's aspect ratio
-    aspectRatio: 3042 / 4032,
+    // TODO: vertical image's aspect ratio
+    aspectRatio: 3 / 4,
   },
 });
