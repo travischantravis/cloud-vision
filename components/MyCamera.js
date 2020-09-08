@@ -59,7 +59,6 @@ const MyCamera = () => {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
               });
               if (!result.cancelled) {
-                console.log(result);
                 navigation.navigate("Preview", { image: result });
               }
             }}
@@ -76,7 +75,7 @@ const MyCamera = () => {
               if (cameraRef) {
                 const result = await cameraRef.current.takePictureAsync();
                 // Save image to library
-                await MediaLibrary.createAssetAsync(result.uri);
+                // await MediaLibrary.createAssetAsync(result.uri);
 
                 navigation.navigate("Preview", { image: result });
               }
