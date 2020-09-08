@@ -1,21 +1,16 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import ImagePreview from "../components/ImagePreview";
 
 const PreviewScreen = ({ route }) => {
   const { image } = route.params;
   return (
     <View style={{ flex: 1 }}>
-      <Image style={styles.image} source={image} />
+      <ImagePreview image={image} />
     </View>
   );
 };
 
 export default PreviewScreen;
 
-const styles = StyleSheet.create({
-  image: {
-    width: 300,
-    height: 300,
-    alignSelf: "center",
-  },
-});
+const styles = StyleSheet.create({});

@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
 
 const MyCamera = () => {
   const navigation = useNavigation();
@@ -23,9 +24,9 @@ const MyCamera = () => {
       // 1. Camera roll Permission
       if (Platform.OS === "ios") {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        // if (status !== "granted") {
-        //   alert("Sorry, we need camera roll permissions to make this work!");
-        // }
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
       }
       // 2. Camera Permission
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -57,7 +58,10 @@ const MyCamera = () => {
               const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
               });
-              navigation.navigate("Preview", { image: result });
+              if (!result.cancelled) {
+                console.log(result);
+                navigation.navigate("Preview", { image: result });
+              }
             }}
           >
             <Ionicons
@@ -71,6 +75,9 @@ const MyCamera = () => {
               // Take a picture now
               if (cameraRef) {
                 const result = await cameraRef.current.takePictureAsync();
+                // Save image to library
+                await MediaLibrary.createAssetAsync(result.uri);
+
                 navigation.navigate("Preview", { image: result });
               }
             }}
