@@ -1,7 +1,8 @@
-import * as firebase from "firebase";
+import * as myFirebase from "firebase";
+import { FIREBASE_API_KEY } from "../environment";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBED1plAwOx0xxcnW64dOxsdUi4UuGwNz8",
+  apiKey: FIREBASE_API_KEY,
   authDomain: "machine-learning-288804.firebaseapp.com",
   databaseURL: "https://machine-learning-288804.firebaseio.com",
   projectId: "machine-learning-288804",
@@ -11,6 +12,6 @@ const firebaseConfig = {
   measurementId: "G-0KWK4PPT2B",
 };
 
-firebase.initializeApp(firebaseConfig);
+myFirebase.initializeApp(firebaseConfig);
 
-export default firebase;
+export default myFirebase;

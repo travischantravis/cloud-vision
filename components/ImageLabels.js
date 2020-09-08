@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, FlatList } from "react-native";
 import { v4 as uuidv4 } from "uuid";
-import firebase from "../config/firebase";
+import myFirebase from "../config/firebase";
 import { CLOUD_VISION_API_KEY } from "../environment";
 
 // Upload image to firebase
@@ -20,7 +20,7 @@ const uploadImageAsync = async (uri) => {
     xhr.send(null);
   });
 
-  const ref = firebase.storage().ref().child("image");
+  const ref = myFirebase.storage().ref().child("image");
   const snapshot = await ref.put(blob);
 
   blob.close();
